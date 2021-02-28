@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <!-- {% for camp in campusobj %}
+    <h3>{{camp.campus_name}}</h3>
+
+    {% for streamevent in camp.streamevent_set.all %}
+      <a href="{% url 'detail_streamevent' camp.campus_name streamevent.id %}">{{ streamevent.title }}</a>
+      <br>
+    {% endfor %}
+  {% endfor %} -->
+  <!-- streamevent_set.all is a way of getting all the videos in a many to one relationship, i.e. there is more than one video related to a hall -->
+{% for camp in campusobj %}
+
+  <div class="jumbotron">
+    <h1 class="display-4">{{camp.campus_name}}</h1>
+    <hr class="my-4">
+    <h3>Choose a stream event below and enjoy!</h3>
+
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="container text-center">
+      <a href="{% url 'create_streamevent' camp.campus_name %}" class="btn btn-success btn-lg">Add Stream Event</a>
+  </div>
+  <br>
+  {% endif %}
+
+  <div class="container">
+    <div class="row">
+      {% for streamevent in camp.streamevent_set.all|dictsort:'date_published' %}
+      <!-- campusmodel_list is the default django method of getting a list of model objects  "modelnameinlowercase_list" -->
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem;">
+            {% for video in streamevent.video_set.all %}
+            <!-- <img src="{{ camp.banner.url }}" class="card-img-top" alt="..."> -->
+            {% endfor %}
+            <div class="card-body">
+              <h5 class="card-title">{{streamevent.title}}</h5>
+              <p class="card-text">{{streamevent.date_published}}</p>
+              {% if user.is_authenticated %}
+              <a href="{% url 'detail_streamevent' camp.campus_name streamevent.id %}"  class="btn btn-primary">Go to this stream</a>
+              {% else %}
+              <a href="{% url 'detail_streamevent' camp.campus_name streamevent.id %}"  class="btn btn-primary">Watch this stream</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endfor %}
+
+
+{% endblock %}

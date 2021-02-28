@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to churchstream!</h1>
+  <p class="lead">Below you can look for your campus to find and watch their stream events</p>
+
+  <!-- <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a> -->
+
+</div>
+
+<div class="container">
+  <div class="row">
+    {% for campus in campusmodel_list %}
+    <!-- campusmodel_list is the default django method of getting a list of model objects  "modelnameinlowercase_list" -->
+      <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+          <img src="{{ campus.banner.url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{campus.campus_name}}</h5>
+            <p class="card-text">{{campus.description}}</p>
+            <a href="{% url 'campus_page' campus.campus_name %}"  class="btn btn-primary">View streams for this campus</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+
+{% endblock %}

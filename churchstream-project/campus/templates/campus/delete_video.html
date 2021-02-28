@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container">
+    <br>
+    <div class="alert alert-danger" role="alert">
+      <h2>Are you sure you want to delete this Video?</h2>
+    </div>
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <!-- this form variable automatically gets passed on from the DeleteHall django class -->
+      <!-- and passes in all the fields from the model as a form -->
+      <button type="submit" class='btn btn-danger btn-lg'>Yes</button>
+    </form>
+    <br>
+    <iframe width="80%" height="350" src="https://www.youtube.com/embed/{{ video.youtube_id}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <br>
+    <br>
+    <a href="{% url 'detail_streamevent' video.streamevent.campus.campus_name video.streamevent.id %}" class="btn btn-success btn-lg">Back to Stream Event</a>
+
+  </div>
+
+{% endblock %}

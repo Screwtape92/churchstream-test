@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="jumbotron text-center">
+  <h1 class="display-4">{{ streamevent.title }}</h1>
+  <hr class="my-4">
+  {% if user.is_authenticated %}
+  <br>
+  <a href="{% url 'update_streamevent' streamevent.campus.campus_name streamevent.id %}" class="btn btn-primary btn-lg">Update Stream Event</a>
+  <br>
+  <br>
+  {% endif %}
+  <h6>{{ streamevent.welcome_message|linebreaks }}</h6>
+
+  {% for video in streamevent.video_set.all %}
+    <iframe width="80%" height="350" src="https://www.youtube.com/embed/{{ video.youtube_id}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {% if user.is_authenticated %}
+      <br>
+      <a href="{% url 'delete_video' streamevent.campus.campus_name streamevent.id video.id %}" class="btn btn-danger">Delete Video</a>
+      <br>
+    {% endif %}
+    <br>
+  {% endfor %}
+
+  <br>
+
+  {% if user.is_authenticated %}
+    {% if streamevent.video_set.all.count == 0 %}
+      <div class="alert alert-danger" role="alert">
+        Dont forget to add a video!
+      </div>
+    {% endif %}
+    <a href="{% url 'add_video' streamevent.campus.campus_name streamevent.id %}" class="btn btn-primary btn-lg">Add Video</a>
+  {% endif %}
+
+  <hr class="my-4">
+
+  <h5>{{ streamevent.question }}</h5>
+  <br>
+  <button type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false">
+    {{ streamevent.response1 }}
+  </button>
+  <br>
+  <br>
+  <button type="button" class="btn btn-outline-warning" data-toggle="button" aria-pressed="false">
+    {{ streamevent.response2 }}
+  </button>
+  <br>
+  <br>
+  <button type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false">
+    {{ streamevent.response3 }}
+  </button>
+
+  <br>
+  <br>
+
+  <div class="card text-left">
+    <div class="card-header">
+      Devotional
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ streamevent.devotional|linebreaks }}</p>
+    </div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="card">
+    <div class="card-header">
+      Prayer
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ streamevent.prayer|linebreaks }}</p>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
